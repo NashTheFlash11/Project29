@@ -13,6 +13,13 @@ var box1, box2, box3, box4, box5, box6, box7, box8, box9, box10, box11, box12, b
 var slingshot;
 
 var gameState = "launched";
+var polygon_img;
+
+var ball;
+function preload(){
+
+  //polygon_img = loadImage("polygon.png");
+}
 
 function setup() {
   createCanvas(1200,800);
@@ -20,7 +27,7 @@ function setup() {
   engine = Engine.create();
   world = engine.world;
 
-  object = new Ground(60, 115, 10, 10);
+  object = new Ground(130, 210, 10, 10);
   stand = new Ground(360, 270, 250, 20);
 
   box1 = new Box(315, 255, 30, 40);
@@ -43,9 +50,10 @@ function setup() {
 
   box16 = new Box(360, 195, 30, 40);
 
-  polygon = new Polygon(50, 200, 20);
+  ball = Bodies.circle(50,200,20);
+  World.add(world,ball);
 
-  slingshot = new Slingshot(polygon.body, {x:130, y:210});
+  slingshot = new Slingshot(this.ball, {x:130, y:210});
 }
 
 function draw() {
@@ -55,7 +63,7 @@ function draw() {
   
   object.display();
   stand.display();
-  polygon.display();
+  slingshot.display();
 
   box1.display();
   box2.display();
@@ -76,4 +84,16 @@ function draw() {
   box15.display();
   
   box16.display();
+
+  ellipse(ball.position.x,ball.position.y,40);
+  // imageMode(CENTER);
+  // image(polygon_img,ball.position.x,ball.position.y,40,40);
+}
+
+function mouseDragged(){
+  Matter.Body.setPosition(this.ball, {x: mouseX, y: mouseY});
+}
+
+function mouseReleased(){
+  slingshot.fly();
 }
